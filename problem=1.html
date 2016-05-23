@@ -122,8 +122,8 @@
         if (totalArray.length === 0) {
             parseMax(maxInput); //addToArray and return max value
         } else {
-            resetPlease();
-            parseMax(maxInput); //addToArray and return max value
+            resetPlease(); //global function
+            parseMax(maxInput); //submit function, addToArray and return max value
         }
 
         function parseMax(m) { //is max submission valid?
@@ -134,7 +134,7 @@
             } else {
                 max = m;
                 message("max", "valid", max);
-                parseMultiples(multiples); //after both inputs have been parsed, calculate answer
+                parseMultiples(multiples); //submit function after both inputs have been parsed, calculate answer
             }
         };
 
