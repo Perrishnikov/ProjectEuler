@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<head>
+    <style>
+    a{
+        margin-left: 20px;
+        text-decoration: none;
+        color: white;
+    }
+    body {
+        background-color: black;
+        color: white;
+        margin-left: 20px;
+        }
+    h1 {
+        margin-left: 20px;
+        }
+    .error{
+        background-color: red;
+    }
+    .valid{
+        background-color: green;
+    }
+    #result{
+        margin-left: 20px;
+        font-size: 20px;
+    }
+    </style>
+    <script src="https://code.jquery.com/jquery-2.2.3.min.js"   integrity="sha256-a23g1Nt4dtEYOj7bR+vTu7+T8VP13humZFBJNIYoEJo="   crossorigin="anonymous"></script>
+</head>
+<body>
+<div>
+    <a href="https://projecteuler.net/problem=1">https://projecteuler.net/problem=1</a>
+    <h1>Multiples of 3 and 5</h1><h2> Problem 1</h2>
+    <p>If we list all the natural numbers below 10 that are multiples of 3 or 5, we get 3, 5, 6 and 9.
+    The sum of these multiples is 23.</p>
+    <p>Find the sum of all the multiples of 3 or 5 below 1000. <strong>Answer: 233168</strong></p>
+    <hr>
+</div>
+<p></p>
+<form>
+    <p>Max number: <input type="text" id="max" value='1000'>
+    <p>Multiples (Comma separated): <input type="text" id="mult" value='3,5'>
+    <p><button type="submit" name="submit">Submit</button>
+    <button id="reset" type="reset" name="reset">Reset</button>
+</form>
+    <div id="result">Result: </div>
+
+<script type="text/javascript">
+    var max; //count up to max
+    var multiplesArray = []; //holds numbers from multiples field
+    var totalArray = []; //array with all the numbers
+
+    function populateTotalArray(){ //run function to get sums outside submit//
+        for (var i = 0; i < multiplesArray.length; i++) { //run addToArray for every multiple
+            addToArray(multiplesArray[i]);
+        }
+
+        sortArray(); //array to numerical order
+        message("result", "result", calcSum()); //sends info to messageResult
+
+        // ----------functions--------//
+        function sortArray(){
+            var sorted = totalArray.sort(function(a, b){return a-b});
+            removeDoubles(sorted);
+        }
+
+        function removeDoubles(s) {
+            var last; //var to check against for doubles
+            var incoming = s; //incoming array
+            var outgoing = []; //array to send out to global
+            for (var i = 0; i < incoming.length; i++) {
+                if (incoming[i] !== last){ //if the incoming value doenst match the last, push it
+                    outgoing.push(incoming[i]);
+                    last = incoming[i];
+                }
+            }
+            totalArray = outgoing;
+        }
+
+        function addToArray(x){ //pushes multiples less than max into totalArray
+            for (var a = 0; a < max; a++) {
+                if (a % x === 0) {
+                    totalArray.push(a);
+                }
+            }
+        }
+
+        function calcSum(){ //sum totalArray
+            return totalArray.reduce(function(a, b) { return a + b; });
+        }
+    }
+
+    function message(target,type,text) {
+        var messTarget = "#" + target; //mult, max, result
+        var messType = type;
+        var messText = text; //text or value to display
+        if (messType === "result") {
+            $(messTarget).append(" " + messText.toLocaleString());
+        } else {
+            $(messTarget).addClass(messType).after("<strong> " + messText + "</strong>");
+        }
+    }
+
+    function resetPlease(){
+        $('input').removeClass('valid error result').attr('value', '');
+        $('p > strong').remove();
+        $('#result').text("Result:");
+        max = "";
+        multiplesArray = [];
+        totalArray = [];
+    }
+
+    $('#reset').click(function() { //reset form actions
+        resetPlease();
+    });
+
+    $('form').submit(function( event ) { //submit form action
+        event.preventDefault();
+        var maxInput = $('#max').val(); //input from max
+        var multiples = $('#mult').val(); //input from multiples
+
+        if (totalArray.length === 0) {
+            parseMax(maxInput); //addToArray and return max value
+        } else {
+            resetPlease();
+            parseMax(maxInput); //addToArray and return max value
+        }
+
+        function parseMax(m) { //is max submission valid?
+            if (isNaN (m) || m < 1){
+                max = "";
+                message("max", "error", "Enter a number greater than 0");
+                console.log("max is not good");
+            } else {
+                max = m;
+                message("max", "valid", max);
+                parseMultiples(multiples); //after both inputs have been parsed, calculate answer
+            }
+        };
+
+        function parseMultiples(m) { //is multiples submission valid?
+            var inputArray = m.split(",");
+            var outputArray = [];
+            for (var i = 0; i < inputArray.length; i++) { //validation
+                if ($.isNumeric(inputArray[i]) && inputArray[i] > 0) {
+                    outputArray.push(inputArray[i]);
+                }
+            }
+
+            if (outputArray.length <= 0) { //message info
+                message("mult", "error", "Enter at least one number greater than 0");
+            } else {
+                multiplesArray = outputArray; //send valid multiples to outputArray
+                message("mult", "valid", multiplesArray);
+                populateTotalArray(); //addToArray and return array of multiples
+            }
+        }
+    });
+</script>
+
+<!-- alternative to above (used to validate) -->
+<!-- <script type="text/javascript">
+    var max = 1000;
+    var m1 = 3;
+    var m2 = 5;
+    var lcd = 15;
+    var array3 = [];
+    var array5 = [];
+    var arraylcd = [];
+
+    for (var a = 1; a < max; a++) {
+        if (a % 3 === 0) {
+            array3.push(a);
+        }
+    }
+    for (var a = 1; a < max; a++) {
+        if (a % 5 === 0) {
+            array5.push(a);
+        }
+    }
+    for (var a = 1; a < max; a++) {
+        if (a % 15 === 0) {
+            arraylcd.push(a);
+        }
+    }
+    console.log("Array3: " + array3 + "sum: " + array3.reduce(function(a, b) { return a + b; }));
+    console.log("Array5: " + array5 + "sum: " + array5.reduce(function(a, b) { return a + b; }));
+    console.log("ArrayLCD: " + arraylcd + "sum: " + arraylcd.reduce(function(a, b) { return a + b; }));
+    console.log("total three arrays: ",
+        (array3.reduce(function(a, b) { return a + b; })) +
+        (array5.reduce(function(a, b) { return a + b; })) -
+        (arraylcd.reduce(function(a, b) { return a + b; })));
+    console.log("total witout LCD: ",
+        (array3.reduce(function(a, b) { return a + b; })) +
+        (array5.reduce(function(a, b) { return a + b; })));
+</script> -->
+</body>
+</html>
