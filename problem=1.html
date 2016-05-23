@@ -129,7 +129,7 @@
 
         function parseMax(m) { //is max submission valid?
             if (isNaN (m) || m < 1){
-                max = "";
+                resetPlease();
                 message("max", "error", "Enter a number greater than 0");
                 console.log("max is not good");
             } else {
@@ -149,6 +149,7 @@
             }
 
             if (outputArray.length <= 0) { //message info
+                resetPlease();
                 message("mult", "error", "Enter at least one number greater than 0");
             } else {
                 multiplesArray = outputArray; //send valid multiples to outputArray
