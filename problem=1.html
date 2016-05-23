@@ -56,7 +56,7 @@
         }
 
         sortArray(); //array to numerical order
-        message("result", "result", calcSum()); //sends info to messageResult
+        message("result", "result", calcSum() + " ...See log for more details"); //sends info to messageResult
         console.log(totalArray);
 
         // ----------functions--------//
@@ -87,7 +87,7 @@
         }
 
         function calcSum(){ //sum totalArray
-            return totalArray.reduce(function(a, b) { return a + b; });
+            return totalArray.reduce(function(a, b) { return a + b; }).toLocaleString();
         }
     }
 
