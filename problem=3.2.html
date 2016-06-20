@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Project 3</title>
+    <style>
+    a{
+        margin-left: 20px;
+        text-decoration: underline;;
+        color: white;
+    }
+    body {
+        background-color: black;
+        color: white;
+        margin-left: 20px;
+        }
+    h1 {
+        margin-left: 20px;
+        }
+    .error{
+        background-color: red;
+    }
+    .valid{
+        background-color: green;
+    }
+    #result{
+        margin-left: 20px;
+        font-size: 20px;
+    }
+    </style>
+    <script src="https://code.jquery.com/jquery-2.2.3.min.js"   integrity="sha256-a23g1Nt4dtEYOj7bR+vTu7+T8VP13humZFBJNIYoEJo="   crossorigin="anonymous"></script>
+</head>
+<body>
+<div>
+    <h1><a href="https://projecteuler.net/problem=3">Largest prime factor</a></h1><h2> Problem 3</h2>
+    <p>The prime factors of 13195 are 5, 7, 13 and 29.</p>
+    <p>What is the largest prime factor of the number 600851475143 ?</p>
+    <p><strong>Answer: </strong></p>
+</div>
+    <hr>
+<form>
+    <p>Value not to exceed: <input type="text" id="max" value="4000000"></p>
+    <p><button type="submit" name="submit">Submit</button></p>
+    <button id="reset" type="reset" name="reset">Reset</button>
+</form>
+<div id="result">Result: </div>
+
+<script type="text/javascript">
+'use strict';
+var maxNum1 = 13195;
+var maxNum2 = 123456;
+var maxNum3 = 600851475143; //600,851,475,143  // 71*839*1471*6857
+var maxNum4 = 9007199254740990; // 3*107*28059810762433
+
+function isValid(value) { //HELPER - validate value
+     if (isNaN(value) || value < 1 || value >= Number.MAX_SAFE_INTEGER) {
+         console.log("number not valid");
+         return false;
+     }
+     return value;
+}
+
+function isPrime (value){ //check if this is a prime number
+    for(var i = 2; i < value; i++) { //loop throuh all numbers less than input value
+        if(value % i === 0) return false; // if the input can divide evenly by any number less than the 'i', it is false
+    }
+    if (value > 1) return value; //return the prime Number greater than 1 because all numbers are divisible by 1
+}
+
+function findPrimes(maxNum){ //main function
+    if (!maxNum) return false; // if isValid returns false, stop here.
+
+    var primeNumbers = []; // temp array holds all prime numbers
+    console.log("---looking for primes of " + maxNum);
+
+    for (var i = 2; i <= maxNum; i++) {
+        if (maxNum % i === 0 && isPrime(i)) { //loop through all numbers, if one of these numbers can divide evenly, AND is prime, divide maxNum by the number to make it smaller.
+            maxNum = maxNum/i; //change the loop target
+            primeNumbers.push(i);
+        } else if (maxNum % i === 0) { //test code to find even divisors that are not prime
+            // maxNum = maxNum/i;
+            // console.log(i + " is not prime and will not be counted");
+        }
+    }
+    console.log(primeNumbers); // LOG
+    return primeNumbers[(primeNumbers.length)]; //RETURN the last item in array to the calling function
+}
+
+findPrimes(isValid(maxNum1));
+findPrimes(isValid(maxNum2));
+findPrimes(isValid(maxNum3));
+findPrimes(isValid(maxNum4));
+
+</script>
+</body>
+</html>

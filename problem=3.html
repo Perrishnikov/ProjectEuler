@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Project 3</title>
+    <style>
+    a{
+        margin-left: 20px;
+        text-decoration: underline;;
+        color: white;
+    }
+    body {
+        background-color: black;
+        color: white;
+        margin-left: 20px;
+        }
+    h1 {
+        margin-left: 20px;
+        }
+    .error{
+        background-color: red;
+    }
+    .valid{
+        background-color: green;
+    }
+    #result{
+        margin-left: 20px;
+        font-size: 20px;
+    }
+    </style>
+    <script src="https://code.jquery.com/jquery-2.2.3.min.js"   integrity="sha256-a23g1Nt4dtEYOj7bR+vTu7+T8VP13humZFBJNIYoEJo="   crossorigin="anonymous"></script>
+</head>
+<body>
+<div>
+    <h1><a href="https://projecteuler.net/problem=3">Largest prime factor</a></h1><h2> Problem 3</h2>
+    <p>The prime factors of 13195 are 5, 7, 13 and 29.</p>
+    <p>What is the largest prime factor of the number 600851475143 ?</p>
+    <p><strong>Answer: </strong></p>
+</div>
+    <hr>
+<form>
+    <p>Value not to exceed: <input type="text" id="max" value="4000000"></p>
+    <p><button type="submit" name="submit">Submit</button></p>
+    <button id="reset" type="reset" name="reset">Reset</button>
+</form>
+<div id="result">Result: </div>
+
+<script type="text/javascript">
+'use strict';
+var maxNum = 13195;
+// var maxNum = 123456;
+// var maxNum = 600851475143; //600,851,475,143  // 71*839*1471*6857
+
+var primeNumbers = [];
+var primeFactors = [];
+
+function isValid(value) { //HELPER - validate vaue
+     if (isNaN(value) || !isFinite(value) || value<1) return false;
+     return value;
+}
+
+function isPrime (value){ //check if this is a prime number
+    for(var i = 2; i < value; i++) { //loop throuh all numbers less than input value
+        if(value % i === 0) return false;
+    }
+    if (value > 1) {
+        return true;
+    }
+}
+
+function findPrimes(maxNum){
+    for (var i = maxNum; i > 0; i--) { //start with the highest values and work down
+        if (i % 5000 === 0 ) {
+            console.log("5000");
+        }
+
+        if(isPrime(i)){ // if i is prime, continue (top down)
+            if(maxNum % i === 0){ //if i is divisible by maxNum
+                console.log(i);
+                // break; //stops at the greatest prime
+            }
+            primeNumbers.push(i); //pushes all prime numbers less than maxNum into primeNumbers array
+        }
+    }
+}
+
+findPrimes(100);
+console.log(primeNumbers);
+
+
+</script>
+</body>
+</html>
