@@ -1,17 +1,17 @@
-var problem_03 = new Problem({
+var problem_03 = {
 
-    problem : "3",
+    problemNum : "3",
     title : "Largest prime factor",
-    text : "The prime factors of 13195 are 5, 7, 13 and 29. What is the largest prime factor of the number 600851475143?",
+    text : "The prime factors of 13,195 are 5, 7, 13 and 29. What is the largest prime factor of the number 600,851,475,143?",
     link : "https://projecteuler.net/problem=3",
     solution : "6857",
     elements : null,
 
     script : function(userVal01){
 
-        console.log("hello world");
+        console.log("problem_03 in action");
 
-        var userVal01; // value user inputs
+        var maxNum = userVal01; // value user inputs
         var maxNum1 = 13195;
         var maxNum2 = 123456;
         var maxNum3 = 600851475143; //600,851,475,143  // 71*839*1471*6857
@@ -50,5 +50,7 @@ var problem_03 = new Problem({
             console.log(primeNumbers); // LOG
             return primeNumbers[(primeNumbers.length)]; //RETURN the last item in array to the calling function
         }
+
+        findPrimes(isValid(maxNum));
     }
-});
+}

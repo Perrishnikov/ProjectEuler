@@ -1,69 +1,88 @@
- 'use strict';
- /**
-  * The Model. Model stores items and notifies
-  * observers about changes.
-  */
+"use strict";
 
- function Problem ({problem, title, text, link, solution, elements, script}) {
-     this.problem = problem,
-     this.title = title,
-     this.text = text,
-     this.link = link,
-     this.solution = solution,
-     this.script = script,
-     this.elements = elements
- }
+var view = {
+    problemViews : function(problem){ //pass in object
+        var problemNum = problem.problemNum;
+        var title = problem.title;
+        var text = problem.text;
+        var link = problem.link;
+        // var solution = problem.solution;
+        var customElements = problem.elements;
+        var script = problem.script;
 
- // Problem.prototype.makeView = function(){
- //     console.log(this);
- //     console.log("Hello World");
- // }
+        addPanel();
+        addNav();
 
- /**
- * The View. View presents the model and provides
- * the UI events. The controller is attached to these
- * events to handle the user interraction.
- */
+        function addNav(){
+            $('#nav-start').append(" \
+            <li><a href='#'> #" + problemNum + " " + title + "</a></li> \
+            ");
+        };
 
- function ProblemView(problem){
-     this.problem = problem,
-     this.title = title,
-     this.text = text,
-     this.link = link,
-     this.solution = solution,
-     this.elements = elements
+        function addPanel(){
+            $('#panel-start').append(" \
+            <div id='problem_" + problemNum + " ' class='panel panel-default problem'> \
+            <div class='panel-heading'> \
+            <h3 class='panel-title'> #" + problemNum + " " + title + "</h3> \
+            </div> \
+            <div class='panel-body'> \
+            <p>" + text + "</p> \
+            <p><a href='" + link + "'</a>" + title + "</p> \
+            </div> \
+            </div> \
+            <form class="form-inline">
 
-     var problemName = "problem_" + problem;
-     console.log(problemName);
+            <div class="form-group">
+            <label for="exampleInputName2">Name</label>
+            <input type="text" class="form-control" id="exampleInputName2" placeholder="Jane Doe">
+            </div>
+            <div class="form-group">
+            <label for="exampleInputEmail2">Email</label>
+            <input type="email" class="form-control" id="exampleInputEmail2" placeholder="jane.doe@example.com">
+            </div>
+            <button type="submit" class="btn btn-default">Send invitation</button>
+            </form>
+            ");
+        }
+    }
+}
 
-     $('#start').append(' \
-     <div id=' + problemName + ' class="panel panel-default problem"> \
-         <div class="panel-heading"> \
-             <h3 class="panel-title"> #' + problem + ' ' + title + '</h3> \
-         </div> \
-         <div class="panel-body"> \
-             <p>' + text + '</p> \
-             <p>' + link + '</p> \
-         </div> \
-     </div> \
-     ');
- }
+function getScripts() {
+    var folder = "_scripts/";
+    var scriptsArray = [];
+    console.log("get scripts");
 
-/**
- * The Controller. Controller responds to user actions and
- * invokes changes on the model.
- */
- var view = new ProblemView (problem_03);
- 
- $(function () {
-    // var model = new Problem (['PHP', 'JavaScript']),
+    $.ajax({
+        url : folder,
+        success: function (data) {
+            $(data).find("a").attr("href", function (index,val) {
 
-        //  {
-        //     // 'list': $('#list'),
-        //     // 'addButton': $('#plusBtn'),
-        //     // 'delButton': $('#minusBtn')
-        // }),
-        // controller = new ListController(problem_3, view);
+                if(val.match (/^problem_\d{2,3}.js$/)) { //loops one at a time. Looks for "problem_***.js"
+                scriptsArray.push(val);
+                }
+            });
+        },
+        complete: function (){
+            console.log(scriptsArray);
+            scriptsArray.sort();
+            console.log(scriptsArray);
+            scriptsArray.forEach(function(element) { //loop through each item in array
+                var path = "_scripts/" + element;
+                $.getScript( path, function() {
+                    var valStripped = element.replace(/.js/, ''); //remove ".js"
+                    var _thisProblem = window[valStripped]; //find the variables in the DOM to use string as reference
+                    view.problemViews(_thisProblem);
+                })
+            });
+        }
+    });
+}
 
-    // view.show();
+$(function(){ //loads first
+    console.log("load");
+    getScripts();
+}());
+
+$(window).ready(function() { //loads afer READY
+    console.log("ready");
 });
