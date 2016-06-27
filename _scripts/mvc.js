@@ -9,6 +9,10 @@ var view = {
         // var solution = problem.solution;
         var customElements = problem.elements;
         var script = problem.script;
+        var inputPrimaryName = problem.inputPrimaryName;
+        var inputSecondaryName = problem.inputSecondaryName || null;
+        var placeholderPrimary = problem.placeholderPrimary || "default";
+        var placeholderSecondary = problem.placeholderSecondary || "default";
 
         addPanel();
         addNav();
@@ -22,26 +26,26 @@ var view = {
         function addPanel(){
             $('#panel-start').append(" \
             <div id='problem_" + problemNum + " ' class='panel panel-default problem'> \
-            <div class='panel-heading'> \
-            <h3 class='panel-title'> #" + problemNum + " " + title + "</h3> \
+                <div class='panel-heading'> \
+                    <h3 class='panel-title'># " + problemNum + " <a href='" + link + "'>" + title + "</a></h3> \
+                </div> \
+                \
+                <div class='panel-body'> \
+                    <p>" + text + "</p> \
+                    <form class='form-inline'> \
+                        <div class='form-group'> \
+                            <label for='" + inputPrimaryName + "'>" + inputPrimaryName + "</label> \
+                            <input type='text' class='form-control' id='" + inputPrimaryName + "' placeholder='" + placeholderPrimary + "'> \
+                        </div> \
+                        <div class='form-group'> \
+                            <label for='" + inputSecondaryName + "'>" + inputSecondaryName + "</label> \
+                            <input class='form-control' id='" + inputSecondaryName + "' placeholder='" + placeholderSecondary + "'> \
+                        </div> \
+                        <button type='submit' class='btn btn-default'>Submit</button> \
+                        <button type='reset' class='btn btn-default'>Reset</button> \
+                    </form> \
+                </div> \
             </div> \
-            <div class='panel-body'> \
-            <p>" + text + "</p> \
-            <p><a href='" + link + "'</a>" + title + "</p> \
-            </div> \
-            </div> \
-            <form class="form-inline">
-
-            <div class="form-group">
-            <label for="exampleInputName2">Name</label>
-            <input type="text" class="form-control" id="exampleInputName2" placeholder="Jane Doe">
-            </div>
-            <div class="form-group">
-            <label for="exampleInputEmail2">Email</label>
-            <input type="email" class="form-control" id="exampleInputEmail2" placeholder="jane.doe@example.com">
-            </div>
-            <button type="submit" class="btn btn-default">Send invitation</button>
-            </form>
             ");
         }
     }
