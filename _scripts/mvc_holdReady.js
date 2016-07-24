@@ -51,64 +51,38 @@ var View = {
     }
 }
 
-var Model = {
-    scriptsArray : [],
-    x : function(_thisProblem) {
-            // _thisProblem.problemNum = new Problem(_thisProblem);
-            View.problemViews(_thisProblem);
-    },
-    getScripts : function (dfd){
-        console.log(dfd);
+var Controller = {
+    getScripts : function (){
         $.ajax({
             url : "_scripts",
+            error : function (){
+                console.error("ajax ERROR");
+            },
             success: function (data) {
-                console.log("running ajax");
+                console.log("ajax SUCCESS");
                 $(data).find("a").attr("href", function (index,val) {
-
                     if(val.match (/^problem_\d{2,3}.js$/)) { //loops one at a time. Looks for "problem_***.js"
                         var path = "_scripts/" + val;
                         $.getScript( path, function() {
                             var valStripped = val.replace(/.js/, ''); //remove ".js"
                             var _thisProblem = window[valStripped]; //find the variables in the DOM to use string as reference
-                            // return Model.scriptsArray;
-                            Model.scriptsArray.push(_thisProblem)
-                            // console.log(_thisProblem);
-                            // dfd.resolve(Model.scriptsArray);
-                            // console.log(Model.scriptsArray);
-                            Model.x(_thisProblem);
+                            View.problemViews(_thisProblem);
                         });
                     }
                 });
             },
-            complete: function (){
-                console.log("complete");
-                Model.scriptsArray.sort();
-                Model.scriptsArray.forEach(function(element) { //loop through each item in array
-                    var path = "_scripts/" + element;
-                    $.getScript( path, function() {
-                        var valStripped = element.replace(/.js/, ''); //remove ".js"
-                        var _thisProblem = window[valStripped]; //find the variables in the DOM to use string as reference
-                        // return Model.scriptsArray;
-                        dfd.resolve(Model.scriptsArray);
-                    })
-                });
+            complete : function (){
+                console.log("ajax COMPLETE");
+                $.holdReady( false );
             }
         });
     }
 }
 
+$.holdReady( true ); //loads all problem scripts 
+Controller.getScripts();
 
 $(document).ready(function() { //loads first
     console.log("ready");
-    var dfd = $.Deferred();
-    dfd.done(function( n ) {
-        var array = n;
-        console.log(n);
-        array.forEach(function(i){
-            View.problemViews(i);
-        });
-    });
-
-    Model.getScripts(dfd);
 
 });

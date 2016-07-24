@@ -51,14 +51,19 @@ var View = {
     }
 }
 
+// function Model() {
+//     // this._problemNum = problemNum;
+//     // console.log(problem);
+//     // this._title = title;
+// }
+function Problem (object){
+    console.log(object);
+}
+
 var Model = {
     scriptsArray : [],
-    x : function(_thisProblem) {
-            // _thisProblem.problemNum = new Problem(_thisProblem);
-            View.problemViews(_thisProblem);
-    },
     getScripts : function (dfd){
-        console.log(dfd);
+        // console.log(dfd);
         $.ajax({
             url : "_scripts",
             success: function (data) {
@@ -75,7 +80,13 @@ var Model = {
                             // console.log(_thisProblem);
                             // dfd.resolve(Model.scriptsArray);
                             // console.log(Model.scriptsArray);
-                            Model.x(_thisProblem);
+
+                            function x (_thisProblem) {
+                                    console.log(_thisProblem);
+                                    _thisProblem.problemNum = new Problem(_thisProblem);
+                            }
+
+                            x(_thisProblem);
                         });
                     }
                 });
@@ -107,6 +118,7 @@ $(document).ready(function() { //loads first
         array.forEach(function(i){
             View.problemViews(i);
         });
+
     });
 
     Model.getScripts(dfd);
